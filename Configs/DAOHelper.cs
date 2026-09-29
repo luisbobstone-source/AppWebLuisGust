@@ -23,7 +23,7 @@ namespace AppWebLuisGust.Configs
         }
 
         // Lê uma data; se a coluna for NULL, devolve null
-        public static DateTime? GetDateTime(MySqlDataReader reader, string column_name)
+        public static DateTime? GetDateOnly(MySqlDataReader reader, string column_name)
         {
             DateTime? value = null;
             if (!reader.IsDBNull(reader.GetOrdinal(column_name)))
