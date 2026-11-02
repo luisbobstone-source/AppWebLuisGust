@@ -4,7 +4,7 @@ namespace AppWebLuisGust.Configs
 {
     public static class DAOHelper
     {
-        // Lê uma string; se a coluna for NULL, devolve string vazia
+
         public static string GetString(MySqlDataReader reader, string column_name)
         {
             string text = string.Empty;
@@ -13,7 +13,7 @@ namespace AppWebLuisGust.Configs
             return text;
         }
 
-        // Lê um double; se a coluna for NULL, devolve 0.0
+
         public static double GetDouble(MySqlDataReader reader, string column_name)
         {
             double value = 0.0;
@@ -22,7 +22,7 @@ namespace AppWebLuisGust.Configs
             return value;
         }
 
-        // Lê uma data; se a coluna for NULL, devolve null
+
         public static DateTime? GetDateOnly(MySqlDataReader reader, string column_name)
         {
             DateTime? value = null;
@@ -31,7 +31,7 @@ namespace AppWebLuisGust.Configs
             return value;
         }
 
-        // Indica se uma coluna está NULL
+  
         public static bool IsNull(MySqlDataReader reader, string column_name)
         {
             return reader.IsDBNull(reader.GetOrdinal(column_name));
