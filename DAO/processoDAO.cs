@@ -36,12 +36,12 @@ namespace AppWebLuisGust.DAO
             return lista;
         }
 
-        // CREATE - Cadastra um novo processo
+        // CREATE - Cadastra um processo
         public void Inserir(Processo processo)
         {
             using var con = _conexao.GetConnection();
 
-            string sql = @"INSERT INTO processos
+            const string sql = @"INSERT INTO processos
                 (numero_pro, data_pro, interessado_pro,
                  assunto_pro, descricao_pro, situacao_pro)
                 VALUES
@@ -49,35 +49,15 @@ namespace AppWebLuisGust.DAO
                  @assunto, @descricao, @situacao)";
 
             using var comando = con.CreateCommand();
-
             comando.CommandText = sql;
 
             comando.Parameters.AddWithValue("@numero", processo.Numero);
-
-            comando.Parameters.AddWithValue(
-                "@data",
-                processo.Data!.Value.ToDateTime(TimeOnly.MinValue)
-            );
-
-            comando.Parameters.AddWithValue(
-                "@interessado",
-                processo.Interessado
-            );
-
-            comando.Parameters.AddWithValue(
-                "@assunto",
-                processo.Assunto
-            );
-
-            comando.Parameters.AddWithValue(
-                "@descricao",
-                processo.Descricao
-            );
-
-            comando.Parameters.AddWithValue(
-                "@situacao",
-                processo.Situacao
-            );
+            comando.Parameters.AddWithValue("@data",
+                processo.Data!.Value.ToDateTime(TimeOnly.MinValue));
+            comando.Parameters.AddWithValue("@interessado", processo.Interessado);
+            comando.Parameters.AddWithValue("@assunto", processo.Assunto);
+            comando.Parameters.AddWithValue("@descricao", processo.Descricao);
+            comando.Parameters.AddWithValue("@situacao", processo.Situacao);
 
             comando.ExecuteNonQuery();
         }
@@ -93,9 +73,7 @@ namespace AppWebLuisGust.DAO
                 WHERE id_pro = @id";
 
             using var comando = con.CreateCommand();
-
             comando.CommandText = sql;
-
             comando.Parameters.AddWithValue("@id", id);
 
             using var leitor = comando.ExecuteReader();
@@ -108,6 +86,7 @@ namespace AppWebLuisGust.DAO
             return MapearProcesso(leitor);
         }
 
+        // UPDATE - Atualiza um processo
         public void Atualizar(Processo processo)
         {
             using var con = _conexao.GetConnection();
@@ -122,51 +101,29 @@ namespace AppWebLuisGust.DAO
                 WHERE id_pro = @id";
 
             using var comando = con.CreateCommand();
-
             comando.CommandText = sql;
 
             comando.Parameters.AddWithValue("@numero", processo.Numero);
-
-            comando.Parameters.AddWithValue(
-                "@data",
-                processo.Data!.Value.ToDateTime(TimeOnly.MinValue)
-            );
-
-            comando.Parameters.AddWithValue(
-                "@interessado",
-                processo.Interessado
-            );
-
-            comando.Parameters.AddWithValue(
-                "@assunto",
-                processo.Assunto
-            );
-
-            comando.Parameters.AddWithValue(
-                "@descricao",
-                processo.Descricao
-            );
-
-            comando.Parameters.AddWithValue(
-                "@situacao",
-                processo.Situacao
-            );
-
+            comando.Parameters.AddWithValue("@data",
+                processo.Data!.Value.ToDateTime(TimeOnly.MinValue));
+            comando.Parameters.AddWithValue("@interessado", processo.Interessado);
+            comando.Parameters.AddWithValue("@assunto", processo.Assunto);
+            comando.Parameters.AddWithValue("@descricao", processo.Descricao);
+            comando.Parameters.AddWithValue("@situacao", processo.Situacao);
             comando.Parameters.AddWithValue("@id", processo.Id);
 
             comando.ExecuteNonQuery();
         }
 
-    
+        // Converte os dados do banco para o objeto Processo
         private static Processo MapearProcesso(MySqlDataReader leitor)
         {
             DateOnly? data = null;
 
             if (!leitor.IsDBNull(leitor.GetOrdinal("data_pro")))
             {
-                DateTime dataBanco = leitor.GetDateTime("data_pro");
-
-                data = DateOnly.FromDateTime(dataBanco);
+                data = DateOnly.FromDateTime(
+                    leitor.GetDateTime("data_pro"));
             }
 
             return new Processo
